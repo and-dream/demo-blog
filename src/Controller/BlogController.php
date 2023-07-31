@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Article;
+use App\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
 {
@@ -34,4 +36,20 @@ class BlogController extends AbstractController
         l'indice étant le nom de la variable dans le fichier twig et valeur sa valeur réelle
         */
     
+        // ici on a créé une route et une méthode
+        #[Route('/blog/ajout', name:"blog_ajout")]
+        public function form() :Response
+        {
+            $article = new Article();     //on va ratacher cet objet à une entity
+            
+            //creer un formulaire en utilisant une méthode AbstractController avec 1 argument
+            $form = $this->createForm(ArticleType::class);
+
+            //ici on va render notre page twig
+            return $this->render('blog/form.html.twig', [                 
+                'formArticle' => $form
+            ]);        
+        }
+
+
 }
