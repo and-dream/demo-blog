@@ -1,0 +1,22 @@
+{#! pour faire un commentaire en twig on utilise {# #}
+
+{#! pour afficher une variable en twig on une double accolage {{nomvariable}} #}
+
+{#! pour utiliser les commandes de twig on fait {%commande} #}
+
+{% extends "base.html.twig" %}
+{#! hérite de la structure et du contenu du fichier base.html.twig #}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+        <h1>{{title}}</h1>
+
+        {% if age >= 18 %}
+            <p>tu es majeur</p>
+        {% else %}
+            <p>tu es mineur</p>
+    {% endif %}
+{% endblock %}
+
+
