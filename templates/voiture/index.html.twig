@@ -1,7 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Les voitures{% endblock %}
+{% block title %}Voitures{% endblock %}
 
 {% block body %}
-    <h1 class="text-center my-4">Les voitures</h1>
+    <h1 class="text-center my-4">Voitures</h1>
+    <div class="container">
+    <section class="row gx-4 gy-3">
+            {# ! for valeur in (objet ou tableau) #}
+            {% for voiture in items %}
+            <div class="col-md-3">
+                <div class="card border-primary">
+                    <div class="card-header">{{ voiture.marque }}</div>
+                    <div class="card-body text-center">
+                        <p>{{ voiture.modele }} </p>
+                        <p>{{ voiture.description }}</p>
+                        <p class="text-end h3">{{ voiture.prix }}€</p>
+                        
+                    </div>
+                </div>
+            
+            </div>
+    {% endfor %}
+    </div>
 {% endblock %}

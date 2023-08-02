@@ -23,7 +23,9 @@
         {#! la fonction form() affiche tout le formulaire d'un seul block non modifiable #}
         
         {#les form symfony sont protégés contre les attaques crsf#}
-        {{ form_start(formArticle)}}
+        {{ form_start(formArticle, {
+            attr: { novalidate: "novalidate"}
+        })}}
 
             {#! en twig un tableau {indice: valeur} en php [indice => valeur]#}
             {{form_row(formArticle.title, {

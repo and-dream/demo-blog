@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Voiture;
 use App\Form\VoitureType;
+use App\Repository\VoitureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class VoitureController extends AbstractController
 {
     #[Route('/voiture', name: 'app_voiture')]
-    public function index(): Response
+    public function index(VoitureRepository $repo): Response
     {
-        return $this->render('voiture/index.html.twig', [
-            'controller_name' => 'VoitureController',
+      $voitures = $repo->findAll();  
+      return $this->render('voiture/index.html.twig', [
+            'items' =>$voitures,
         ]);
     }
 
@@ -53,15 +55,15 @@ class VoitureController extends AbstractController
     }
 //maintenant il faut rendre le formulaire fonctionnel
 //il faut récupérer les données dans une superglobale
-// on les passe en paramètre de la fonction ajout()
-// on a besoin de la classe Request pour récupérer les globales get et post
+// *on les passe en paramètre de la fonction ajout()
+// on a besoin de la classe Request pour récupérer les globales notamment get et post
 // on a besoin de l'entitymanagerinterface pour les requêtes
-// public function ajout(Request $request, EntityManagerInterface $manager) 
+// !public function ajout(Request $request, EntityManagerInterface $manager) 
 //pour remplir chacune de mes tables je vais remplir un objet
-// on va devoir instancier l'objet $voiture = new Voiture;
+//* -> on va devoir instancier l'objet $voiture = new Voiture;
 //$form = $this->createForm(VoitureType::class);
-//ratacher mon objet dans le form
-// $form = $this->createForm(VoitureType::class, $voiture);
+//*ratacher mon objet dans le form
+//! $form = $this->createForm(VoitureType::class, $voiture);
 
 
 
