@@ -26,18 +26,27 @@
         </li>
        
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="{{path ('app_blog') }}">Articles</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{{path ('app_voiture') }}">Les voitures</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">BackOffice</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{path('blog_ajout')}}">Ajouter un article</a>
+            <a class="dropdown-item" href="{{ path('blog_ajout') }}">Ajouter un article</a>
+            <a class="dropdown-item" href="{{ path('blog_gestion') }}">Gestion des articles</a>
+            <a class="dropdown-item" href="{{ path('voiture_ajout') }}">Ajouter une voiture</a>
           </div>
+         
+            
+        
         </li>
       </ul>
       <form class="d-flex">
         <input class="form-control me-sm-2" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
       </form>
     </div>
   </div>

@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion des articles{% endblock %}
+
+{% block body %} {# on va créer un tableau ppour gérer les articles #}
+
+<div class="container mt-5">
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>titre</th>
+            <th>image</th>
+            <th>contenu</th>
+            <th>date</th>
+            <th>option</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for article in articles %}  
+
+            <tr>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+                <td><img src="{{ article.image}}" alt="" width="50"></td>
+                <td>{{ article.content }}</td>
+                <td>{{ article.createdAt|date('d/m/Y à H:i:s')}}</td>
+                <td>
+                    <a href="{{ path('blog_show', {id: article.id} ) }}" class="text-info">voir</a>
+                    <a href="{{ path('blog_modifier', {id: article.id} )}}" class="text-warning">modifier</a>
+                    <a href="{{ path('blog_supprimer', {id: article.id} )}}" class="text-danger">supprimer</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

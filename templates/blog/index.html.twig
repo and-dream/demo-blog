@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BlogController!{% endblock %}
+{% block title %}Articles{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1 class="text-center my-4">Les Articles</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <!--afficher tous nos éléments-->
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/stagiaire/Desktop/demoBlog/src/Controller/BlogController.php'|file_link(0) }}">src/Controller/BlogController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/stagiaire/Desktop/demoBlog/templates/blog/index.html.twig'|file_link(0) }}">templates/blog/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="container text-center px-4">
+        <section class="row gx-4 gy-3">
+            {#! for valeur in (objet ou tableau#}
+            {% for article in articles %}
+            <div class="col-md-3">
+                <div class="card border-primary">
+                    <div class="card-header">{{ article.title }}</div>
+                    <div class="card-body text-center">
+                        <img class="img-fluid" src="{{ article.image }}" alt="">
+                        <!-- on va vouloir que nos balises <p> soient interprétées -->
+                        {# le filtre raw permet d'interpréter les balises html#}
+                        {{ article.content|raw}}
+                        <p class="text-start">Ecrit le{{ article.createdAt|date('d,m,Y à H:i:s')}}</p>
+                        <div class="text-center">
+                            <a href="{{ path('blog_show', {id: article.id} ) }}" class="btn btn-secondary">voir plus</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
 {% endblock %}
