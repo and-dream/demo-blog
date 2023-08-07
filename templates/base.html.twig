@@ -41,10 +41,12 @@
           </div>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-      </form>
+      {% if app.user %}     
+          <a href="{{ path('app_logout') }}" class="btn btn-outline-dander">Déconnexion</a>
+          {% else %}           
+          <a href="{{ path('app_register') }}" class="btn btn-outline-info me-3">Inscription</a>
+          <a href="{{ path('app_login') }}" class="btn btn-outline-secondary">Connexion</a>
+    {% endif %}
     </div>
   </div>
 </nav>

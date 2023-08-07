@@ -24,7 +24,7 @@
                 <td>{{ article.id }}</td>
                 <td>{{ article.title }}</td>
                 <td><img src="{{ article.image}}" alt="" width="50"></td>
-                <td>{{ article.content }}</td>
+                <td>{{ article.content|slice(0, 100) }}</td>
                 <td>{{ article.createdAt|date('d/m/Y à H:i:s')}}</td>
                 <td>
                     <a href="{{ path('blog_show', {id: article.id} ) }}" class="text-info">voir</a>

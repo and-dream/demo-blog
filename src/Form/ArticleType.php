@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
@@ -16,24 +18,28 @@ class ArticleType extends AbstractType
         $builder
             ->add('title')   //attribut name
             ->add('content')
-            ->add('imageFile', FileType::class, [
-                'label' => 'Image (image jpg)',
-                'mapped' => false,
-                'required' => false,
+            ->add('image')
+            // , FileType::class, [
+            //     'label' => 'Image (image jpg)',
+            //     'mapped' => false,
+            //     'required' => false,
 
-                'constraints' => [
-                    new File ([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpg',
-                            'image/jpeg',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image au format jpg ou jpeg',
-                    ])
-                ]
-            ]) 
+            //     'constraints' => [
+            //         new File ([
+            //             'maxSize' => '1024k',
+            //             'mimeTypes' => [
+            //                 'image/jpg',
+            //                 'image/jpeg',
+            //             ],
+            //             'mimeTypesMessage' => 'Veuillez télécharger une image au format jpg ou jpeg',
+            //         ])
+            //     ]
+            // ]) 
 
-            
+            ->add('category', EntityType::class,[
+                'class' => Category::class,
+                'choice_label' => 'title'
+            ])
             // ->add('created_at')
         ;
     }
