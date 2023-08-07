@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 class BlogController extends AbstractController
@@ -64,11 +65,7 @@ class BlogController extends AbstractController
             }
             // dd($article);
             
-
-
             // $article = new Article();     //on va ratacher cet objet à une entity
-
-            
             
             //creer un formulaire en utilisant une méthode AbstractController avec 1 argument
             $form = $this->createForm(ArticleType::class, $article);   //ratacher $article au formulaire
@@ -81,6 +78,25 @@ class BlogController extends AbstractController
             //vérifier si l'utilisateur a cliqué sur Envoyer
             if($form->isSubmitted()&& $form ->isValid())
             {
+
+                $imageFile = $form->get('image')->getData();
+
+                if($imageFile){
+                    $originalFilename = pathinfo($imageFile->getClientOriginalNale(),PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniquid().'.'.$imageFile->guessExtension();
+
+                    try{
+                        $imageFile->move(
+                            $this->getParameter('images_directory'),
+                            $newFilename
+                        );
+                    }catch (FileException $e){
+
+                    }
+
+                    $article->setImageFilename($filename);
+                }
                 //ce qui est en POST c'est la méthode request de l'objet globals
                 // dd($globals->request); 
                 $article->setCreatedAt(new \Datetime);

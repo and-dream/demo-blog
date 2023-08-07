@@ -16,9 +16,10 @@
                     <div class="card-header">{{ article.title }}</div>
                     <div class="card-body text-center">
                         <img class="img-fluid" src="{{ article.image }}" alt="">
+                        <p>Categorie : {{ article.category.title }}</p>
                         <!-- on va vouloir que nos balises <p> soient interprétées -->
                         {# le filtre raw permet d'interpréter les balises html#}
-                        {{ article.content|raw}}
+                        {{ article.content|slice(0, 100) }}
                         <p class="text-start">Ecrit le{{ article.createdAt|date('d,m,Y à H:i:s')}}</p>
                         <div class="text-center">
                             <a href="{{ path('blog_show', {id: article.id} ) }}" class="btn btn-secondary">voir plus</a>
