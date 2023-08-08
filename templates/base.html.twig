@@ -32,6 +32,8 @@
         <li class="nav-item">
           <a class="nav-link" href="{{path ('app_voiture') }}">Voitures</a>
         </li>
+        {% if is_granted('ROLE_ADMIN') %}
+        
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">BackOffice</a>
           <div class="dropdown-menu">
@@ -40,6 +42,7 @@
             <a class="dropdown-item" href="{{ path('voiture_ajout') }}">Ajouter une voiture</a>
           </div>
         </li>
+        {% endif %}
       </ul>
       {% if app.user %}     
           <a href="{{ path('app_logout') }}" class="btn btn-outline-dander">Déconnexion</a>

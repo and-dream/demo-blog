@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
+//toutes les routes de ce contrôleur vont commencer par la route de la classe
+//l'intérêt quand on empêchera certains utilisateurs de ne pas aller sur certaines routes
+// il n'y aque le rôle admin qui pourra y accéder
+
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
