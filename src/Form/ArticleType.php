@@ -18,23 +18,22 @@ class ArticleType extends AbstractType
         $builder
             ->add('title')   //attribut name
             ->add('content')
-            ->add('image')
-            // , FileType::class, [
-            //     'label' => 'Image (image jpg)',
-            //     'mapped' => false,
-            //     'required' => false,
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false, // vu que ce n'est pas mappé, qd on va modifier il ne va pas se remplir, on ne va pas exiger une nouvelle image à chaque fois
 
-            //     'constraints' => [
-            //         new File ([
-            //             'maxSize' => '1024k',
-            //             'mimeTypes' => [
-            //                 'image/jpg',
-            //                 'image/jpeg',
-            //             ],
-            //             'mimeTypesMessage' => 'Veuillez télécharger une image au format jpg ou jpeg',
-            //         ])
-            //     ]
-            // ]) 
+                'constraints' => [
+                    new File ([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/png',
+                            'image/jpeg',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image au format jpg ou jpeg',
+                    ])
+                ]
+            ]) 
 
             ->add('category', EntityType::class,[
                 'class' => Category::class,

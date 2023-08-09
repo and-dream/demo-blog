@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\ArticleType;
+use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,13 +53,41 @@ class BlogController extends AbstractController
         //notre chemin on peut lui passer un argument pour récupérer la valeur on déclare la variable où seront stockés les infos
         //si je lui défini un tableau en lui disant qu'il y a un champ id où on peut récupérer des données
         //créer une variable qui va contenir mon article en entier avec comme valeur la méthode find
+
+        //dans cette méthode on va rajouter la création du formulaire de commentaire
         
         #[Route('/blog/show/{id}', name:"blog_show")]
-        public function show($id, ArticleRepository $repo)
+        public function show($id, ArticleRepository $repo, Request $rq, EntityManagerInterface $manager)
         {
             $article = $repo->find($id);
-            return $this->render('blog/show.html.twig', [
-                'article' => $article,
+
+            // ! une fois qu'on a rajouté le request (récup com) et le manager interface (envoyer en bdd)
+            //! formulaire commentaire
+            // instancier la classe
+            //une fois instancier on va le rajouter au formulaire ($form->handleRequest($rq))
+            $commentaire = new Comment;
+            $form = $this->createForm(CommentType::class, $commentaire);
+            $form->handleRequest($rq);
+
+            //préparer notre traitement du formulaire
+            if($form->isSubmitted() && $form->isValid())
+            {
+               $commentaire->setCreatedAt(new \DateTime)
+                            ->setArticle($article)
+                            ->setUser($this->getUser());
+                //! $this->getUser() permet de récupérer l'objet utilisateur connecté
+                $manager->persist($commentaire);
+                $manager->flush();
+                //mettre un message en session, AbstractController y a accès
+                $this->addFlash('success', "Votre commentaire a bien été envoyé");
+                //on va redirectToroute après l'affichage du message
+                return $this->redirectToRoute('blog_show', ['id' => $id]);
+            }
+            // dd($article);
+            // render : aperçu d'une page, afficher un visuel
+                return $this->render('blog/show.html.twig', [
+                    'article' => $article,
+                    'comment' => $form
             ]);
         }
 

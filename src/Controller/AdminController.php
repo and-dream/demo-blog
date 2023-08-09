@@ -9,7 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 //toutes les routes de ce contrôleur vont commencer par la route de la classe
@@ -34,7 +36,7 @@ class AdminController extends AbstractController
     
         // ici on a créé une route et une méthode
         #[Route('/article/ajout', name:"blog_ajout")]
-        public function form(Request $globals, EntityManagerInterface $manager, Article $article = null) :Response
+        public function form(Request $globals, EntityManagerInterface $manager, Article $article = null, SluggerInterface $slugger) :Response
         {
 
             if($article == null)
@@ -44,6 +46,8 @@ class AdminController extends AbstractController
             // dd($article);
             
             // $article = new Article();     //on va ratacher cet objet à une entity
+
+            $editMode = $article->getId() !== null;
             
             //creer un formulaire en utilisant une méthode AbstractController avec 1 argument
             $form = $this->createForm(ArticleType::class, $article);   //ratacher $article au formulaire
@@ -56,25 +60,32 @@ class AdminController extends AbstractController
             //vérifier si l'utilisateur a cliqué sur Envoyer
             if($form->isSubmitted()&& $form ->isValid())
             {
+                //! début traitement de l'image
+                $imageFile = $form->get('image')->getData(); //récup data du fichier dans le formulaire
 
-                // $imageFile = $form->get('image')->getData();
+                //qd il y a une variable dans un if, dans quel cas il rentre ? si c'est true. Mais ici soit on a recup de la data soit on a null
+                // si imageFile n'est pas null on rentre dedans
+                if($imageFile){
+                    //! permet de récupérer le nom de notre fichier de base
+                    $originalFilename = pathinfo($imageFile->getClientOriginalNale(),PATHINFO_FILENAME);
+                    //on enlève ce qui gène dans le nom du fichier si on l'utilise en URL
+                    //si on fait une route avec le nom du fichier
+                    $safeFilename = $slugger->slug($originalFilename);
+                    //on créé un nouveau nom de fichier pour notre image qui sera: nomSafeDuFichier-idUnique
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
-                // if($imageFile){
-                //     $originalFilename = pathinfo($imageFile->getClientOriginalNale(),PATHINFO_FILENAME);
-                //     $safeFilename = $slugger->slug($originalFilename);
-                //     $newFilename = $safeFilename.'-'.uniquid().'.'.$imageFile->guessExtension();
+                    try{
+                        $imageFile->move(
+                            $this->getParameter('img_upload'), //l'endroit où on va déplacer le fichier
+                            $newFilename
+                        );
+                    }catch (FileException $e){
 
-                //     try{
-                //         $imageFile->move(
-                //             $this->getParameter('images_directory'),
-                //             $newFilename
-                //         );
-                //     }catch (FileException $e){
+                    }
+                    $article->setImage($newFilename);
+                }
 
-                //     }
-
-                //     $article->setImageFilename($filename);
-                // }
+                //! fin du traitement de l'image
                 //ce qui est en POST c'est la méthode request de l'objet globals
                 // dd($globals->request); 
                 $article->setCreatedAt(new \Datetime);
@@ -87,6 +98,14 @@ class AdminController extends AbstractController
 
                 //* flush va permettre d'exécuter tout les persist précédents
                 $manager->flush();
+                
+                if($editMode)
+                {
+                    $this->addFlash('success', "L'article a bien été modifié");
+                }else{
+                    $this->addFlash('success', "L'article a bien été ajouté");
+                }
+                $this->addFlash('success', "L'article a bien été ajouté");
 
                 //redirection, on va faire un return et utiliser une méthode de AbstractController, il faut lui donner un nom de route
                 //* redirectToRoute() permet de rediriger vers une autre page de  notre site à l'aide du nom de la route (name)
@@ -97,7 +116,7 @@ class AdminController extends AbstractController
             //ici on va render notre page twig
             return $this->render('admin/article/form.html.twig', [                 
                 'formArticle' => $form,
-                'editMode' => $article->getId() !== null   
+                'editMode' => $editMode,
                 //si je suis en modification je vais avoir un chiffre, si je suis en ajout je vais avoir Null
                 // si je suis en ajout ça sera différent
             ]);        

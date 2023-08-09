@@ -66,8 +66,8 @@ class ArticleFixtures extends Fixture
                     $days = $interval->days;
                     $minimum = '-' . $days . ' days';
 
-                    $comment->setAuthor($this->faker->name)
-                            ->setContent($this->faker->paragraph())
+                    // $comment->setAuthor($this->faker->name)
+                    $comment->setContent($this->faker->paragraph())
                             ->setArticle($article)
                             ->setCreatedAt($this->faker->dateTimeBetween($minimum));
                     //une fois qu'on a set on fait notre persist, préparer la requête pour insérer (pour l'instant on ne l'envoie pas)
@@ -80,7 +80,7 @@ class ArticleFixtures extends Fixture
     
             //execution
                 $manager->flush();
-        }
+        } 
         }
 
 

@@ -15,6 +15,25 @@
     
 
     <hr>
+    {% if app.user %}  
+
+    <h2 class="text-center my-2">Ajouter votre commentaire</h2>
+    <div class="container my-4 border border-primary">
+    {{ form_start(comment) }}
+        {{ form_row(comment.content, {
+            label: "Votre commentaire"
+        })}}
+        <button class="btn btn-primary my-2">Envoyer</button>
+    {{ form_end(comment) }}
+
+    </div>
+
+    {% else %}
+        
+    <p class="text-center my-2">Connectez-vous <a href="{{ path('app_login') }}">ici</a> pour ajouter un commentaire</p> 
+
+    {% endif %}
+
     <h2 class="text-center my-2">Commentaires</h2>
     <table class="table table-light table-sm">
         <thead>
@@ -27,7 +46,7 @@
         <tbody>
             {% for comment in article.comments %}
                 <tr>
-                    <td>{{ comment.author }} <br> <small>{{ comment.createdAt|date('d/m/Y à H:i:s') }}</small></td>
+                    <td>{{ comment.user.firstname }} <br> <small>{{ comment.createdAt|date('d/m/Y à H:i:s') }}</small></td>
                     <td>{{ comment.content }}</td>
                 </tr>              
             {% endfor %}
